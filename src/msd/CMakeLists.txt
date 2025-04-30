@@ -7,4 +7,10 @@ target_include_directories(msd
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_link_libraries(msd rarray)
+target_link_libraries(msd
+        PUBLIC
+        rarray
+
+        PRIVATE
+        OpenMP::OpenMP_C
+)

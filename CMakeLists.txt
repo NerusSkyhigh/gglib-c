@@ -1,3 +1,4 @@
+# CMakeLists.txt
 cmake_minimum_required(VERSION 3.20)
 project(BANGLES C)
 
@@ -10,7 +11,7 @@ enable_testing()
 find_package(OpenMP REQUIRED)
 
 
-# ──────── Subdirectories ────────
+# ──────── Add Subdirectories to compilation ────────
 add_subdirectory(src)
 add_subdirectory(tests)
 
@@ -25,8 +26,10 @@ target_link_libraries(BANGLES
         msd
         lammps_utils
         rarray
+        configParser
         OpenMP::OpenMP_C
         m                 # math library
+        tomlc99
 )
 
 
