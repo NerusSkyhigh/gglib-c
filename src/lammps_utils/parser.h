@@ -22,9 +22,4 @@ void readLAMMPSCoordinates(const char* filename, LAMMPSData* data, const int64_t
 void checkTimestepMismatch(const LAMMPSData* data);
 void freeLAMMPSData(LAMMPSData* data);
 void writeLAMMPSData(const char* filename, const LAMMPSData* data);
-
-double* getBeadTrajectory(const LAMMPSData* data, const int64_t atom_id);
-int64_t* getAtomsFromMoleculeList(const LAMMPSData* data, const int64_t* molecule_ids, const int64_t numMolecules, int64_t* numOfSelectedAtoms);
-int64_t* getAtomsInMolecule(const LAMMPSData* data, const int64_t molecule_id, int64_t* numOfSelectedAtoms);
-int64_t* getAtomsFromType(const LAMMPSData* data, const int64_t a_type, int64_t* numOfSelectedAtoms);
 #endif // LAMMPS_DATA_H
