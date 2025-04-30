@@ -35,7 +35,10 @@ double* compute_time_averaged_msd(const double* coordinates, const int64_t* time
             const double dy = coordinates[3*t_end+1] - coordinates[3*t_start+1];
             const double dz = coordinates[3*t_end+2] - coordinates[3*t_start+2];
             const double msd = dx*dx + dy*dy + dz*dz;
+
+            #pragma omp atomic
             ave_msd[idx_deltaTime] += msd;
+    #pragma omp atomic
             window_counters[idx_deltaTime] +=1;
         }
         //break;
