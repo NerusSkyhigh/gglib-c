@@ -27,6 +27,7 @@ target_link_libraries(BANGLES
         lammps_utils
         rarray
         configParser
+        utils
         OpenMP::OpenMP_C
         m                 # math library
         tomlc99

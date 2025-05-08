@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "msd.h"
-#include "parser.h"
+#include "LAMMPSParser.h"
 #include "analysis.h"
 #include "configParser.h"
 #include "rarray.h"
@@ -74,32 +74,37 @@ int main(const int argc, char* argv[]) {
 
     printf("COORDINATES:\n");
     readLAMMPSCoordinates(cfg.input_file, &data, cfg.T_EQ);
-    printf("\tFirst coordinate: %f %f %f\n", data.coordinates[0], data.coordinates[1], data.coordinates[2]);
+    printf("\tFirst coordinate: %f %f %f\n", data.frames[0]->coordinates[0], data.frames[0]->coordinates[1], data.frames[0]->coordinates[2]);
 
-    int64_t offset = (data.num_timesteps-1)*(data.num_atoms)*3 + (data.num_atoms-1)*3;
-    printf("\tLast coordinate:  %f %f %f\n", data.coordinates[offset], data.coordinates[offset+1], data.coordinates[offset+2]);
+    int64_t lastFrame = (data.num_timesteps-1);
+    int64_t lastParticle = (data.num_atoms-1)*3;
+    printf("\tLast coordinate:  %f %f %f\n", data.frames[lastFrame]->coordinates[lastParticle  ],
+                                                 data.frames[lastFrame]->coordinates[lastParticle+1],
+                                                 data.frames[lastFrame]->coordinates[lastParticle+2]);
 
 
     //printf("Resaving file to output.lammpstrj as a tests\n");
     //writeLAMMPSData("output.lammpstrj", &data);
 
 
-    /* -------------------------------------------------------------- */
-    // Let's extract the relevant beads based on the molId
-    //int64_t MOLID_MAXIRINGS[3] = { 605, 606, 607 };
-    // TEMPLATE - (sim:LB_rev1)
-    // Use notebook for minirings and number; find and replace spaces with `, ` to get the array
-    //const int64_t NUMBER_OF_MOLECULES = 80;
-    //int64_t MOLID_RELEVANT_MINIRINGS[80] = {7, 8, 9, 11, 16, 17, 18, 23, 24, 27, 30, 32, 40, 42, 54, 58, 59, 61, 62, 63,
-    //                                       64, 80, 81, 86, 88, 89, 109, 111, 113, 142, 172, 173, 174, 175, 176, 178, 181, 183, 209, 216,
-    //                                      217, 219, 246, 247, 252, 254, 282, 288, 289, 359, 362, 389, 395, 397, 422, 429, 430, 431, 457, 461,
-    //                                      463, 486, 496, 497, 525, 528, 531, 532, 545, 553, 559, 562, 564, 565, 566, 577, 579, 581, 583, 585};
+    {;
+        /* -------------------------------------------------------------- */
+        // Let's extract the relevant beads based on the molId
+        //int64_t MOLID_MAXIRINGS[3] = { 605, 606, 607 };
+        // TEMPLATE - (sim:LB_rev1)
+        // Use notebook for minirings and number; find and replace spaces with `, ` to get the array
+        //const int64_t NUMBER_OF_MOLECULES = 80;
+        //int64_t MOLID_RELEVANT_MINIRINGS[80] = {7, 8, 9, 11, 16, 17, 18, 23, 24, 27, 30, 32, 40, 42, 54, 58, 59, 61, 62, 63,
+        //                                       64, 80, 81, 86, 88, 89, 109, 111, 113, 142, 172, 173, 174, 175, 176, 178, 181, 183, 209, 216,
+        //                                      217, 219, 246, 247, 252, 254, 282, 288, 289, 359, 362, 389, 395, 397, 422, 429, 430, 431, 457, 461,
+        //                                      463, 486, 496, 497, 525, 528, 531, 532, 545, 553, 559, 562, 564, 565, 566, 577, 579, 581, 583, 585};
 
-    // TEMPLATE - (sim:LB_rev0)
-    //const int64_t NUMBER_OF_MOLECULES = 52;
-    //int64_t MOLID_RELEVANT_MINIRINGS[52] = {7, 8, 23, 30, 50, 53, 54, 62, 64, 90, 113, 117, 142, 143, 144, 147, 148, 149, 174, 176,
-    //                                      177, 181, 209, 210, 211, 212, 216, 217, 245, 246, 282, 288, 318, 319, 355, 356, 390, 431, 432, 456,
-    //                                      495, 543, 552, 559, 566, 574, 575, 577, 578, 582, 585, 586};
+        // TEMPLATE - (sim:LB_rev0)
+        //const int64_t NUMBER_OF_MOLECULES = 52;
+        //int64_t MOLID_RELEVANT_MINIRINGS[52] = {7, 8, 23, 30, 50, 53, 54, 62, 64, 90, 113, 117, 142, 143, 144, 147, 148, 149, 174, 176,
+        //                                      177, 181, 209, 210, 211, 212, 216, 217, 245, 246, 282, 288, 318, 319, 355, 356, 390, 431, 432, 456,
+        //                                      495, 543, 552, 559, 566, 574, 575, 577, 578, 582, 585, 586};
+    }
 
     // EXTRACT THE RELEVANT BEADS FROM THE TRAJECTORY
     size_t initialCapacity = 1;
@@ -132,7 +137,7 @@ int main(const int argc, char* argv[]) {
     }
 
     // Select atom_id of beads with type specified
-    sel_atIds = getAtomsFromType(&data, cfg.atom_types, cfg.atom_types_size, &numOfSelectedAtoms);
+    sel_atIds = getAtomsFromTypeList(&data, cfg.atom_types, cfg.atom_types_size, &numOfSelectedAtoms);
     if (numOfSelectedAtoms < 1) {
         printf("No atom of type specified in the file %s.\n", cfg.input_file);
     } else {
@@ -199,8 +204,10 @@ int main(const int argc, char* argv[]) {
         // `com+t*3` points to xt.
         // Similarly, `data.coordinates + data.num_atoms*t*3` points to
         // the x coordinate of the first particle at time t.
-        size_t offset = (size_t) data.num_atoms*t*3;
-        compute_CoM(data.coordinates+offset, data.num_atoms, com+3*t);
+
+        //OLD: size_t offset = (size_t) data.num_atoms*t*3;
+        //OLD: compute_CoM(data.coordinates+offset, data.num_atoms, com+3*t);
+        compute_CoM(data.frames[t]->coordinates, data.num_atoms, com+3*t);
     }
 
     output_file = fopen(cfg.com_output_file, "w");
@@ -218,11 +225,11 @@ int main(const int argc, char* argv[]) {
     /* -------------------------------------------------------------- */
     printf("Removing center of mass motion\n");
     for(int64_t t=0; t<data.num_timesteps; t++) {
-        int64_t offset = data.num_atoms*t*3;
+        //int64_t offset = data.num_atoms*t*3;
         for(int64_t i=0; i<data.num_atoms; i++) {
-            data.coordinates[offset+3*i]   -= com[t*3];
-            data.coordinates[offset+3*i+1] -= com[t*3+1];
-            data.coordinates[offset+3*i+2] -= com[t*3+2];
+            data.frames[t]->coordinates[3*i]   -= com[t*3];     // OLD: data.coordinates[offset+3*i]   -= com[t*3];
+            data.frames[t]->coordinates[3*i+1] -= com[t*3+1];   // OLD: data.coordinates[offset+3*i+1] -= com[t*3+1];
+            data.frames[t]->coordinates[3*i+2] -= com[t*3+2];   // OLD: data.coordinates[offset+3*i+2] -= com[t*3+2];
             //printf("%lf %lf %lf\t", com[t*3], com[t*3+1], com[t*3+2]);
             //printf("%lf %lf %lf\n", data.coordinates[t*3], data.coordinates[t*3+1], data.coordinates[t*3+2]);
         }
