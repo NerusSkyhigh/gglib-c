@@ -7,7 +7,7 @@
 #include "rarray.h"
 
 
-rarray* rarray_init(size_t item_size, size_t initialCapacity) {
+rarray* rarray_init(const size_t item_size, const size_t initialCapacity) {
     if (item_size == 0) {
         fprintf(stderr, "Error: Invalid item size in rarray_init.\n");
         return NULL; // Invalid item size
@@ -86,7 +86,7 @@ int rarray_push(rarray* arr, void* newElement) {
     return 0;
 }
 
-void* rarray_access(rarray* arr, size_t index) {
+void* rarray_access(rarray* arr, const size_t index) {
     if (!arr) {
         return NULL;
     } else if(index >= arr->numElements) {
