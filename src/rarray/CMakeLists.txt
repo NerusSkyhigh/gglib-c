@@ -1,5 +1,7 @@
 # Create a library target from msd.c
-add_library(rarray rarray.c)
+add_library(rarray STATIC
+        rarray.c
+)
 
 # Let targets that link to this access its headers
 target_include_directories(rarray
