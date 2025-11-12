@@ -1,3 +1,5 @@
+find_package(OpenMP REQUIRED)
+
 # Create a library target from msd.c
 add_library(msd msd.c)
 
