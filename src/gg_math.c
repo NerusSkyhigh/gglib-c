@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "gg_math.h"
+#include "../include/gg_math.h"
 
 double randn(void) {
     // https://en.wikipedia.org/wiki/Normal_distribution#Generating_values_from_normal_distribution

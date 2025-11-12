@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gg_io.h"
+#include "../include/gg_io.h"
 
 void initLammpsData(LammpsDat *ld, const char *filename, size_t n_particles, double boxL) {
     if (!ld || !filename) return;
