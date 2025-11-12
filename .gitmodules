@@ -1,0 +1,3 @@
+[submodule "PhysicsEngine"]
+	path = PhysicsEngine
+	url = https://github.com/NerusSkyhigh/PhysicsEngine
