@@ -1,7 +1,6 @@
 # src/CMakeLists.txt
-add_subdirectory(config_parser)
 add_subdirectory(rarray)
-add_subdirectory(msd)
-add_subdirectory(lammps_utils)
+add_subdirectory(msd) # Yet to fix
+add_subdirectory(lammps_utils) #Yet to fix
 add_subdirectory(PingPongBuffer)
-
+add_subdirectory(CircularBuffer)
