@@ -29,3 +29,4 @@ Feel free to open issues and pull requests if you find bugs or want to suggest i
 Libraries used for testing, development or libraries that already implement useful functions.
 - [G Lib](https://docs.gtk.org/glib/index.html): GLib is a general-purpose, portable utility library, which provides many useful data types, macros, type conversions, string utilities, file utilities, a mainloop abstraction, and so on.
 - [RayLib](https://www.raylib.com/): raylib is a simple and easy-to-use library to enjoy videogames programming. (note: _it provides an easy and straightforward way to visualize stuff_)
+- [TOML-C](https://github.com/arp242/toml-c): C library for parsing [TOML](https://toml.io/en/) 1.0. Passes all of TOML test suite.
