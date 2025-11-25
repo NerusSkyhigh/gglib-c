@@ -1,10 +1,10 @@
 # Create a library target from the lammps_utils folder source files
-add_library(lammpstryIO
+add_library(lammpstrjIO STATIC
         lammpstrjIO.c
 )
 
 # Specify the directory for the header files
-target_include_directories(lammpstryIO
+target_include_directories(lammpstrjIO
         PUBLIC
-        ..  # This makes the headers accessible for other targets
+        ${CMAKE_CURRENT_SOURCE_DIR}
 )
