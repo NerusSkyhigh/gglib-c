@@ -5,4 +5,4 @@ set(CMAKE_C_STANDARD 11)
 
 
 # ──────── Add Subdirectories to compilation ────────
-add_subdirectory(src)
+#add_subdirectory(src)
