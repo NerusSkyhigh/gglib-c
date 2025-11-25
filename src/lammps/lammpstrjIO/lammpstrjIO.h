@@ -61,5 +61,5 @@ void freeLammpsTrjData(LammpsTrjFile *ld);
  * @param ld Pointer to the initialized LammpsDat struct.
  * @param coordinates Flat array of particle coordinates of size 3 * n_particles.
  */
-void writeLammpsTrjFrame(LammpsTrjFile *ld, float *coordinates);
+void writeLammpsTrjFrame(LammpsTrjFile *ld, double *coordinates);
 
