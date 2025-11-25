@@ -27,7 +27,7 @@ void initLammpsTrjData(LammpsTrjFile *ld, const char *filename, size_t n_particl
 }
 
 
-void writeLammpsTrjFrame(LammpsTrjFile *ld, float *coordinates) {
+void writeLammpsTrjFrame(LammpsTrjFile *ld, double *coordinates) {
     if (!ld || !coordinates) return;
 
     FILE *fp;
